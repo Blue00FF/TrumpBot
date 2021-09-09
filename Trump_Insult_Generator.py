@@ -39,13 +39,18 @@ def generateInsult(user_response):
     response_scores = [item.item() for item in cosine_similarities[1:]]
     score_insults = [(score, insult) for score, insult in zip(response_scores, insults)]
     sorted_score_insults = sorted(score_insults, reverse=True, key=lambda x: x[0])
-    Trump_response = "You are a " + sorted_score_insults[0][1] + "!"
+    if sorted_score_insults[0][1][:2] == "a " or sorted_score_insults[0][1][:3] == "an ":
+        Trump_response = "You are" + sorted_score_insults[0][1] + "!"
+    else:
+        Trump_response = "You are a " + sorted_score_insults[0][1] + "!"
     return Trump_response
 
 
+print("Type bye when you want to quit the program")
+
 while True:
-    user_response = pyip.inputStr(prompt="Tell me about yourself and I will insult you.")
-    if user_response != "quit":
+    user_response = pyip.inputStr(prompt="Tell me about yourself and I will insult you.\n")
+    if user_response.lower() != "bye":
         print(generateInsult(user_response))
     else:
         break
