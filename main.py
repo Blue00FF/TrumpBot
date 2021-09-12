@@ -41,12 +41,12 @@ def generateResponse(user_response):
     user_response = user_response.lower()
     Trump_response = ""
     vectorizer = TfidfVectorizer(stop_words=token_stop, tokenizer=tokenizer)
-    vectors = vectorizer.fit_transform([user_response] + sentence_tokens)
-    cosine_similarities = linear_kernel(vectors[0:1], vectors)
-    related_indices = cosine_similarities.argsort()[0][-1]
+    vectors = vectorizer.fit_transform(sentence_tokens + [user_response])
+    cosine_similarities = linear_kernel(vectors[-1:], vectors)
+    related_indices = cosine_similarities.argsort()[0][-2]
     flat = cosine_similarities.flatten()
     flat.sort()
-    req = flat[-1]
+    req = flat[-2]
     if req == 0:
         print("I don't know what to say to that.")
     else:
@@ -54,18 +54,15 @@ def generateResponse(user_response):
     return Trump_response
 
 
-#print("Type bye when you want to quit the program.")
-#print("Why are you here?")
-print(generateResponse("What do you think about television?"))
+print("TrumpBot : Type bye when you want to quit the program.")
+print("TrumpBot : Why are you here?")
 
-# while True:
-#    user_response = pyip.inputStr()
-#    if user_response.lower() != "bye":
-#        print(generateResponse(user_response))
-#        print("TrumpBot : ", end="")
-#        print(generateResponse(user_response))
-#        sent_tokens.remove(user_response)
-#    else:
-#        break
+while True:
+    user_response = pyip.inputStr(prompt = "You: ")
+    if user_response.lower() != "bye":
+        print("TrumpBot : ", end="")
+        print(generateResponse(user_response))
+    else:
+        break
 
-#hprint("Bye, you son of a gun!")
+print("Bye, you son of a gun!")
